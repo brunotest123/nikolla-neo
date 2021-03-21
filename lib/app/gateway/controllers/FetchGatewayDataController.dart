@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/components/commons/FetchCurrentLocation.dart';
 import 'package:nikolla_neo/components/commons/FetchDeviceInfo.dart';
+import 'package:nikolla_neo/models/Booking.dart';
 import 'package:nikolla_neo/models/GuestProfile.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Session.dart';
@@ -37,6 +38,7 @@ class FetchGatewayDataController extends BaseController {
     Box usersBox = await Hive.openBox<User>(usersTable);
     Box sessionBox = await Hive.openBox<Session>(sessionsTable);
     Box guestProfileBox = await Hive.openBox<GuestProfile>(guestProfilesTable);
+    await Hive.openBox<Booking>(guestBookingsTable);
 
     if (usersBox.values.length == 0) {
       this.screenNotifier.value = mobileNumber.Index();

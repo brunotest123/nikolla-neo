@@ -1,92 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/app/place/public/components/PlaceTile.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
+import '../../public/components/Index.dart' as placePublic;
+
 class PlaceItem extends StatelessWidget {
   final Place place;
+  final bool hiddenAvatar;
 
-  PlaceItem({@required this.place}) : assert(place != null);
-
-  final Widget _iconLocation = Padding(
-    padding: EdgeInsets.only(right: 5.0),
-    child: Icon(Icons.location_on, color: error, size: 16.0),
-  );
-
-  final Widget ratingIcon = Padding(
-    child: Icon(Icons.star, color: yellowNik, size: 14.0),
-    padding: EdgeInsets.only(right: 2.0),
-  );
-
-  final Widget placeRating = Container(
-    child: Text("5.0",
-        style: TextStyle(
-          fontFamily: 'SFUIText',
-          color: darkGrey,
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          fontStyle: FontStyle.normal,
-          letterSpacing: 0,
-        )),
-  );
+  PlaceItem({@required this.place, this.hiddenAvatar}) : assert(place != null);
 
   @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      ScreenContainer(
-          child: Container(
-        color: Colors.black,
-        height: 200,
-        width: double.infinity,
-      )),
-      Padding(
-          padding: EdgeInsets.only(left: 15, right: 15),
-          child: ListTile(
-              onTap: () {},
-              subtitle: Row(children: [
-                _iconLocation,
-                Expanded(
-                    child: Text("47 Mount Street Lower, Dublin 2",
-                        maxLines: 1,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: midGrey,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0,
-                        ))),
-                Padding(padding: EdgeInsets.only(right: 5)),
-                Text("1.3 km",
-                    style: TextStyle(
-                      fontFamily: 'SFUIText',
-                      color: midGrey,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0,
-                    ))
-              ]),
-              title: Row(children: [
-                Expanded(
-                    child: Text("Nikolla Restaurant",
-                        maxLines: 1,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: darkGrey,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0,
-                        ))),
-                Padding(padding: EdgeInsets.only(right: 5)),
-                Row(
-                  children: <Widget>[ratingIcon, placeRating],
-                )
-              ]))),
-      Padding(padding: EdgeInsets.only(top: 40)),
-    ]);
-  }
+  Widget build(BuildContext context) => InkWell(
+      onTap: () {
+        showCupertinoModalPopup(
+            context: context,
+            builder: (BuildContext context) {
+              return placePublic.Index(place: place);
+            });
+      },
+      child: Column(children: [
+        (this.hiddenAvatar != true
+            ? ScreenContainer(
+                child: Container(
+                color: Colors.black,
+                height: 200,
+                width: double.infinity,
+              ))
+            : Container()),
+        PlaceTile(place: place),
+        Padding(
+            padding:
+                EdgeInsets.only(top: (this.hiddenAvatar != true ? 40 : 0))),
+      ]));
 }

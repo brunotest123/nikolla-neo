@@ -38,6 +38,10 @@ class Place extends Equatable {
   final List<Shift> shifts;
   @HiveField(11)
   final String locale;
+  @HiveField(12)
+  final double lat;
+  @HiveField(13)
+  final double lng;
 
   Place(
       {this.id,
@@ -50,10 +54,14 @@ class Place extends Equatable {
       this.county,
       this.country,
       this.locale,
+      this.lat,
+      this.lng,
       this.products,
       this.shifts});
 
-  String addressInfo() => "";
+  String addressInfo() => [this.addressOne, this.addressTwo]
+      .where((element) => element != null)
+      .join(', ');
 
   Map<String, dynamic> toMap({bool ignoreId}) {
     Map<String, dynamic> map = Map<String, dynamic>();
@@ -90,11 +98,50 @@ class Place extends Equatable {
         county: map['county'],
         country: map['country'],
         locale: map['locale'],
+        lat: (map['latitude'] is String
+            ? double.parse(map['latitude'])
+            : map['latitude']),
+        lng: (map['longitude'] is String
+            ? double.parse(map['longitude'])
+            : map['longitude']),
         products: ProductSerializable().fromJsonArray(map['products']),
         shifts: ShiftSerializable().fromJsonArray(map['shifts']));
   }
 
   String toJson() => json.encode(toMap());
+
+  List<int> durationTime() {
+    switch (90) {
+      case 30:
+        return [15, 30];
+        break;
+      case 60:
+        return [15, 30, 60];
+        break;
+      case 90:
+        return [30, 60, 90];
+        break;
+      case 120:
+        return [60, 90, 120];
+        break;
+      case 150:
+        return [60, 90, 120, 150];
+        break;
+      default:
+        return [15];
+    }
+  }
+
+  List<DateTime> fetchAvailability() {
+    return [
+      DateTime.parse('2020-01-12 09:00'),
+      DateTime.parse('2020-01-12 09:30'),
+      DateTime.parse('2020-01-12 10:00'),
+      DateTime.parse('2020-01-12 10:30'),
+      DateTime.parse('2020-01-12 11:30'),
+      DateTime.parse('2020-01-12 12:30')
+    ];
+  }
 
   factory Place.fromJson(String source) => Place.fromMap(json.decode(source));
 

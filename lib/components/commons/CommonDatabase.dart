@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:nikolla_neo/models/Booking.dart';
 import 'package:nikolla_neo/models/GuestProfile.dart';
 import 'package:nikolla_neo/models/HostProfile.dart';
 import 'package:nikolla_neo/models/Money.dart';
@@ -14,6 +15,7 @@ import 'package:nikolla_neo/models/Shift.dart';
 class CommonDatabase {
   static Future begin() async {
     await Hive.initFlutter();
+    Hive.registerAdapter(BookingAdapter());
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(MoneyAdapter());
     Hive.registerAdapter(PolicyAdapter());
@@ -74,6 +76,7 @@ class CommonDatabase {
   static Future save<T>({@required String table, @required T data}) async {}
 
   static Future clear() async {
+    Box _bookingBox = await Hive.openBox<Booking>(guestBookingsTable);
     Box _userBox = await Hive.openBox<User>(usersTable);
     Box _sessionBox = await Hive.openBox<Session>(sessionsTable);
     Box _guestProfileBox = await Hive.openBox<GuestProfile>(guestProfilesTable);
@@ -84,6 +87,7 @@ class CommonDatabase {
 
     await _sessionBox.clear();
 
+    await _bookingBox.clear();
     await _userBox.clear();
     await _guestProfileBox.clear();
     await _hostProfileBox.clear();

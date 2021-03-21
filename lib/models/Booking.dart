@@ -1,40 +1,60 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:nikolla_neo/api/clients/Serealizable.dart';
 import 'package:nikolla_neo/models/Place.dart';
+import 'package:nikolla_neo/models/Shift.dart';
 import 'package:nikolla_neo/models/User.dart';
 
-class Booking extends Equatable {
-  final String id;
-  final DateTime startAt;
-  final DateTime endAt;
-  final String kind;
-  final int numGuest;
-  final String status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final User user;
-  final Place place;
+part 'Booking.g.dart';
 
-  Booking({
-    this.id,
-    this.startAt,
-    this.endAt,
-    this.kind,
-    this.numGuest,
-    this.status,
-    this.createdAt,
-    this.updatedAt,
-    this.user,
-    this.place,
-  });
+const String guestBookingsTable = "nikolla_guest_bookings";
+const String hostBookingsTable = "host_bookings";
+
+@HiveType(typeId: 11)
+class Booking extends Equatable {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final DateTime startAt;
+  @HiveField(2)
+  final DateTime endAt;
+  @HiveField(3)
+  final String kind;
+  @HiveField(4)
+  final int numGuest;
+  @HiveField(5)
+  final String status;
+  @HiveField(6)
+  final DateTime createdAt;
+  @HiveField(7)
+  final DateTime updatedAt;
+  @HiveField(8)
+  final User user;
+  @HiveField(9)
+  final Place place;
+  @HiveField(10)
+  final Shift shift;
+
+  Booking(
+      {this.id,
+      this.startAt,
+      this.endAt,
+      this.kind,
+      this.numGuest,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.user,
+      this.place,
+      this.shift});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'start_at': startAt,
-      'end_at': endAt,
+      'start_at': startAt?.toString(),
+      'end_at': endAt?.toString(),
       'kind': kind,
       'num_guest': numGuest,
       'status': status,
@@ -42,6 +62,7 @@ class Booking extends Equatable {
       'updated_at': updatedAt,
       'user': user?.toMap(),
       'place': place?.toMap(),
+      'shift': shift?.toMap()
     };
   }
 
@@ -63,7 +84,8 @@ class Booking extends Equatable {
             ? null
             : DateTime.parse(map['updated_at'])),
         user: User.fromMap(map['user']),
-        place: Place.fromMap(map['place']));
+        place: Place.fromMap(map['place']),
+        shift: (map['shift'] == null ? null : Shift.fromMap(map['shift'])));
   }
 
   String toJson() => json.encode(toMap());
@@ -82,10 +104,10 @@ class Booking extends Equatable {
 
 class BookingSerializable implements Serializable<Booking> {
   @override
-  String record = 'booking';
+  String record = 'orders/booking';
 
   @override
-  String records = 'bookings';
+  String records = 'orders/bookings';
 
   @override
   Booking fromJson(Map<String, dynamic> json,

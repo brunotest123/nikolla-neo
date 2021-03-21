@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nikolla_neo/app/dashboard/guest/components/Header.dart';
+import 'package:nikolla_neo/models/Booking.dart';
 import '../../../place/search/components/Index.dart' as searchIndex;
 import '../../../place/search-bar/components/Index.dart' as searchBarIndex;
 import '../../../guest-profile/show/components/Index.dart' as guestProfileShow;
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 class Index extends StatelessWidget {
   final ValueNotifier<bool> _arrowNotification = ValueNotifier(false);
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget _body(BuildContext context) => Scaffold(
       body: Container(
           child: Column(
             children: [
@@ -29,4 +32,24 @@ class Index extends StatelessWidget {
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [darkGreyFive, darkGreyThree], stops: [0, 1]))));
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder(
+      valueListenable: Hive.box<Booking>(guestBookingsTable).listenable(),
+      builder: (context, Box<Booking> box, child) {
+        if (_checkBooking(box)) {
+          return Container(child: Text('test'));
+        }
+
+        return _body(context);
+      });
+
+  bool _checkBooking(Box<Booking> box) {
+    if (box.values == null) return false;
+    if (box.values.isEmpty) return false;
+
+    Booking booking = box.values.first;
+
+    return (booking.status != null);
+  }
 }

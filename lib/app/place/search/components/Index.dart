@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nikolla_neo/app/place/search/components/NotFound.dart';
+import 'package:nikolla_neo/app/place/search/components/PlaceList.dart';
 import 'package:nikolla_neo/models/Place.dart';
+import 'package:nikolla_neo/styleguide/screen-container.dart';
 // import 'package:nikolla_neo/app/place/search/components/NotFound.dart';
 // import 'package:nikolla_neo/app/place/search/components/PlaceItem.dart';
 // import 'package:nikolla_neo/app/place/search/components/PlaceList.dart';
@@ -32,12 +34,14 @@ class Index extends StatelessWidget {
                           return NotFound();
                         }
 
-                        return Container();
-                      })
-                  // ScreenContainer(top: 40, child: NotFound())
-                  // Expanded(child: PlaceList(places: [])),
+                        List<Place> places = box.values.toList();
 
-                  ));
+                        if (places.length == 0) {
+                          return NotFound();
+                        }
+
+                        return PlaceList(places: places);
+                      })));
         }
 
         return Container();
