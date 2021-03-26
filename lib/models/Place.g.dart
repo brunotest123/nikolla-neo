@@ -29,6 +29,7 @@ class PlaceAdapter extends TypeAdapter<Place> {
       locale: fields[11] as String,
       lat: fields[12] as double,
       lng: fields[13] as double,
+      timeZone: fields[14] as String,
       products: (fields[9] as List)?.cast<Product>(),
       shifts: (fields[10] as List)?.cast<Shift>(),
     );
@@ -37,7 +38,7 @@ class PlaceAdapter extends TypeAdapter<Place> {
   @override
   void write(BinaryWriter writer, Place obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class PlaceAdapter extends TypeAdapter<Place> {
       ..writeByte(12)
       ..write(obj.lat)
       ..writeByte(13)
-      ..write(obj.lng);
+      ..write(obj.lng)
+      ..writeByte(14)
+      ..write(obj.timeZone);
   }
 
   @override

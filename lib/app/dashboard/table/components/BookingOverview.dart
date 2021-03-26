@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nikolla_neo/app/dashboard/table/components/BookingCountDown.dart';
 import 'package:nikolla_neo/app/dashboard/table/components/PlaceAddress.dart';
-import 'package:nikolla_neo/app/dashboard/table/components/PlaceDetails.dart';
+import 'package:nikolla_neo/app/dashboard/table/components/BookingDetails.dart';
 import 'package:nikolla_neo/models/Booking.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
@@ -20,7 +20,7 @@ class BookingOverview extends StatelessWidget {
           return Column(children: [
             Padding(padding: EdgeInsets.only(top: 60)),
             ScreenContainer(child: BookingCountDown(booking: booking)),
-            ScreenContainer(child: PlaceDetails(place: booking.place)),
+            ScreenContainer(child: BookingDetails(booking: booking)),
             ScreenContainer(child: PlaceAddress(place: booking.place))
           ]);
         }

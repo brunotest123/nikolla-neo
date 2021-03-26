@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:nikolla_neo/app/shifts/list/components/ShiftTile.dart';
 import 'package:nikolla_neo/app/shifts/list/controllers/FetchShiftsController.dart';
 import 'package:nikolla_neo/models/Place.dart';
-import 'package:nikolla_neo/models/Shift.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
@@ -29,11 +28,14 @@ class Index extends StatelessWidget {
                   padding: EdgeInsets.only(right: 15),
                   child: ValueListenableBuilder(
                       valueListenable:
-                          Hive.box<Shift>(draftShiftsTable).listenable(),
-                      builder: (context, Box<Shift> box, child) {
+                          Hive.box<Place>(hostPlacesTable).listenable(),
+                      builder: (context, Box<Place> box, child) {
                         if (box.values.isEmpty) {
-                          return Container();
+                          return Center(child: Text('no place'));
                         }
+
+                        Place response = box.values
+                            .firstWhere((element) => element == place);
 
                         return InkWell(
                           child: Icon(Icons.plus_one, color: links),
@@ -41,7 +43,7 @@ class Index extends StatelessWidget {
                             showCupertinoModalPopup(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return shiftNew.Index(place: place);
+                                  return shiftNew.Index(place: response);
                                 });
                           },
                         );
@@ -77,7 +79,8 @@ class Index extends StatelessWidget {
 
                   return ListView(
                       children: response.shifts
-                          .map((shift) => ShiftTile(shift: shift))
+                          .map((shift) =>
+                              ShiftTile(place: response, shift: shift))
                           .toList());
                 })));
   }

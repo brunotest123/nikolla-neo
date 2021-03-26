@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/api/Bookings.dart';
 import 'package:nikolla_neo/api/Domain.dart';
 import 'package:nikolla_neo/api/GuestProfiles.dart';
 import 'package:nikolla_neo/api/Places.dart';
@@ -38,7 +39,6 @@ class FetchGatewayDataController extends BaseController {
     Box usersBox = await Hive.openBox<User>(usersTable);
     Box sessionBox = await Hive.openBox<Session>(sessionsTable);
     Box guestProfileBox = await Hive.openBox<GuestProfile>(guestProfilesTable);
-    await Hive.openBox<Booking>(guestBookingsTable);
 
     if (usersBox.values.length == 0) {
       this.screenNotifier.value = mobileNumber.Index();
@@ -81,6 +81,12 @@ class FetchGatewayDataController extends BaseController {
       return;
     }
 
+    Booking booking = await _fetchBooking();
+
+    if (booking != null) {
+      print('tem booking');
+    }
+
     await Hive.openBox<Place>(guestPlacesTable);
 
     if (refreshSession == true) session = await _fetchLocation();
@@ -93,6 +99,29 @@ class FetchGatewayDataController extends BaseController {
     _fetchPlaces(session: session);
 
     this.screenNotifier.value = guestDashboard.Index();
+  }
+
+  Future<Booking> _fetchBooking() async {
+    Box<Booking> guestBookingBox =
+        await Hive.openBox<Booking>(guestBookingsTable);
+
+    if (guestBookingBox.values.isEmpty) {
+      List<Booking> bookings = await Bookings().list(domain: Domain.guests);
+      await CommonDatabase.fetchAll<Booking>(
+          table: guestBookingsTable, values: bookings);
+    }
+
+    if (guestBookingBox.values.length == 0) return null;
+
+    try {
+      Booking booking = guestBookingBox.values.first;
+
+      if (booking?.id == null) return null;
+
+      return booking;
+    } catch (e, s) {
+      return null;
+    }
   }
 
   Future _fetchPlaces({@required Session session}) async {

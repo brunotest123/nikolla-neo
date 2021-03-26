@@ -33,7 +33,8 @@ class Index extends StatelessWidget {
 
     await CommonDatabase.insert<Booking>(
         table: guestBookingsTable,
-        data: Booking(kind: 'table', place: result, numGuest: 2));
+        data: Booking(
+            kind: 'table', status: 'approved', place: result, numGuest: 2));
   }
 
   @override

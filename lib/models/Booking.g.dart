@@ -28,13 +28,14 @@ class BookingAdapter extends TypeAdapter<Booking> {
       user: fields[8] as User,
       place: fields[9] as Place,
       shift: fields[10] as Shift,
+      numOfTable: fields[11] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Booking obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class BookingAdapter extends TypeAdapter<Booking> {
       ..writeByte(9)
       ..write(obj.place)
       ..writeByte(10)
-      ..write(obj.shift);
+      ..write(obj.shift)
+      ..writeByte(11)
+      ..write(obj.numOfTable);
   }
 
   @override

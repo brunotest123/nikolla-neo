@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nikolla_neo/api/Bookings.dart';
+import 'package:nikolla_neo/api/Domain.dart';
 import 'package:nikolla_neo/app/bookings/new-table/components/ChangeNumGuest.dart';
 import 'package:nikolla_neo/app/place/public/components/PlaceTile.dart';
+import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/components/widgets/HeaderInfoWithTwoLines.dart';
 import 'package:nikolla_neo/models/Booking.dart';
+import 'package:nikolla_neo/models/Place.dart';
+import 'package:nikolla_neo/models/Shift.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
@@ -13,12 +19,41 @@ class ConfirmationModal extends StatelessWidget {
 
   ConfirmationModal({@required this.booking}) : assert(booking != null);
 
+  _fetchBooking(BuildContext context) async {
+    await EasyLoading.show();
+
+    await _buldBooking(context);
+
+    await EasyLoading.dismiss();
+  }
+
+  _buldBooking(BuildContext context) async {
+    try {
+      Place place = this.booking.place;
+      Shift shift = this.booking.place.shifts.first;
+
+      Booking response = await Bookings().create(
+          domain: Domain.guests, place: place, shift: shift, booking: booking);
+
+      await CommonDatabase.truncate<Booking>(table: guestBookingsTable);
+      await CommonDatabase.insert<Booking>(
+          table: guestBookingsTable, data: response);
+
+      Navigator.pop(context); // Close confirmation screen
+      Navigator.pop(context); // Close confirmation screen
+    } catch (errorMessage, stacktrace) {
+      print(errorMessage);
+      // newExceptionLog(errorMessage, stacktrace,
+      //     friendlyMessage: 'Invalid booking');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: InkWell(
           onTap: () {
-            // _newHostProfile();
+            _fetchBooking(context);
           },
           child: Container(
               width: 70,

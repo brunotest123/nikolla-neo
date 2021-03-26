@@ -93,6 +93,7 @@ class Session extends Equatable {
   Future<String> findLocation() async {
     if (lat == null || lng == null) return "";
 
+    // TODO: add try catch to avoid error when the connection is offline.
     List<Address> addresses = await Geocoder.local
         .findAddressesFromCoordinates(Coordinates(lat, lng));
 

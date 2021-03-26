@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/components/commons/MainOptions.dart';
 import 'package:nikolla_neo/app/products/edit/WeekDaysAvailablity.dart';
+import 'package:nikolla_neo/components/commons/BoxOptions.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Product.dart';
-import 'package:nikolla_neo/styleguide/colors.dart';
-import 'package:nikolla_neo/styleguide/screen-container.dart';
 
 import 'EditForm.dart';
 import 'DescriptionForm.dart';
@@ -59,78 +59,6 @@ class Options extends StatelessWidget {
               subTitleText: "All shifts",
               onTap: () {})),
       EnableProduct(product: product, place: place)
-    ]);
-  }
-}
-
-class MainOptions extends StatelessWidget {
-  final String titleText;
-
-  MainOptions({@required this.titleText}) : assert(titleText != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return ScreenContainer(
-        top: 15,
-        bottom: 15,
-        child: Align(
-            alignment: Alignment.bottomLeft,
-            child: Text(this.titleText,
-                style: TextStyle(
-                  color: darkGrey,
-                  fontSize: 19,
-                  fontWeight: FontWeight.w700,
-                  fontStyle: FontStyle.normal,
-                ))));
-  }
-}
-
-class BoxOptions extends StatelessWidget {
-  final String titleText;
-  final String subTitleText;
-  final Function onTap;
-  final bool showArrow;
-  final bool warningText;
-
-  BoxOptions(
-      {@required this.titleText,
-      @required this.onTap,
-      this.subTitleText,
-      this.showArrow,
-      this.warningText})
-      : assert(titleText != null && onTap != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      Padding(
-          padding: EdgeInsets.only(left: 15, right: 15),
-          child: ListTile(
-              trailing: (showArrow == false
-                  ? null
-                  : Icon(Icons.keyboard_arrow_right)),
-              subtitle: (subTitleText == null
-                  ? null
-                  : Text(subTitleText,
-                      style: TextStyle(
-                        fontFamily: 'SFUIText',
-                        color:
-                            (warningText == true ? error : Color(0xff444444)),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0,
-                      ))),
-              onTap: onTap,
-              title: Text(titleText,
-                  style: TextStyle(
-                    fontFamily: 'SFUIText',
-                    color: (warningText == true ? error : warmGrey),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                  )))),
-      ScreenContainer(child: Divider())
     ]);
   }
 }

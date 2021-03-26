@@ -5,6 +5,7 @@ import 'package:nikolla_neo/models/Booking.dart';
 import '../../../place/search/components/Index.dart' as searchIndex;
 import '../../../place/search-bar/components/Index.dart' as searchBarIndex;
 import '../../../guest-profile/show/components/Index.dart' as guestProfileShow;
+import '../../../dashboard/table/components/Index.dart' as dashbaordTable;
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
@@ -38,7 +39,7 @@ class Index extends StatelessWidget {
       valueListenable: Hive.box<Booking>(guestBookingsTable).listenable(),
       builder: (context, Box<Booking> box, child) {
         if (_checkBooking(box)) {
-          return Container(child: Text('test'));
+          return dashbaordTable.Index(booking: box.values.first);
         }
 
         return _body(context);
@@ -50,6 +51,6 @@ class Index extends StatelessWidget {
 
     Booking booking = box.values.first;
 
-    return (booking.status != null);
+    return (booking.id != null);
   }
 }

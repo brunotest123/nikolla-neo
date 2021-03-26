@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nikolla_neo/app/auth/security-code/components/PinCodeTextField.dart';
 import 'package:nikolla_neo/app/auth/security-code/controllers/SaltController.dart';
+import 'package:nikolla_neo/components/widgets/HeaderInfoWithTwoLines.dart';
 import 'package:nikolla_neo/models/User.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 
 import 'CountDown.dart';
 import 'Footer.dart';
-import 'HeaderInfo.dart';
 import 'RequestNewCode.dart';
 import 'SubTitleInfo.dart';
 
@@ -38,7 +38,10 @@ class Index extends StatelessWidget {
               ))),
       body: Column(
         children: [
-          ScreenContainer(top: 20, child: HeaderInfo()),
+          ScreenContainer(
+              top: 20,
+              child: HeaderInfoWithTwoLines(
+                  firstLine: "Enter", lastLine: "verification code")),
           ScreenContainer(top: 20, child: SubTitleInfo(user: user)),
           ScreenContainer(top: 5, child: CountDown()),
           ScreenContainer(top: 10, child: RequestNewCode()),

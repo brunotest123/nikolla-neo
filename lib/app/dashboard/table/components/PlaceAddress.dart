@@ -68,7 +68,7 @@ class PlaceAddress extends StatelessWidget {
           Container(padding: EdgeInsets.only(top: 15)),
           Align(
               alignment: Alignment.centerLeft,
-              child: Text("47 Mount Street Lower, Dublin 2",
+              child: Text(place.addressInfo(),
                   maxLines: 1,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
@@ -82,7 +82,7 @@ class PlaceAddress extends StatelessWidget {
           Container(padding: EdgeInsets.only(top: 5)),
           Align(
               alignment: Alignment.centerLeft,
-              child: Text("D02 TN83 - Dublin, Ireland",
+              child: Text(place.addressComplement(),
                   maxLines: 1,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,

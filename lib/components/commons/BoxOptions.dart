@@ -6,9 +6,17 @@ class BoxOptions extends StatelessWidget {
   final String titleText;
   final String subTitleText;
   final Function onTap;
+  final bool showArrow;
+  final bool warningText;
+  final Color dividerColor;
 
   BoxOptions(
-      {@required this.titleText, this.subTitleText, @required this.onTap})
+      {@required this.titleText,
+      @required this.onTap,
+      this.subTitleText,
+      this.showArrow,
+      this.warningText,
+      this.dividerColor})
       : assert(titleText != null && onTap != null);
 
   @override
@@ -17,12 +25,16 @@ class BoxOptions extends StatelessWidget {
       Padding(
           padding: EdgeInsets.only(left: 15, right: 15),
           child: ListTile(
+              trailing: (showArrow == false
+                  ? null
+                  : Icon(Icons.keyboard_arrow_right)),
               subtitle: (subTitleText == null
                   ? null
                   : Text(subTitleText,
                       style: TextStyle(
                         fontFamily: 'SFUIText',
-                        color: Color(0xff444444),
+                        color:
+                            (warningText == true ? error : Color(0xff444444)),
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                         fontStyle: FontStyle.normal,
@@ -32,12 +44,14 @@ class BoxOptions extends StatelessWidget {
               title: Text(titleText,
                   style: TextStyle(
                     fontFamily: 'SFUIText',
-                    color: warmGrey,
+                    color: (warningText == true ? error : warmGrey),
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                   )))),
-      ScreenContainer(child: Divider(color: darkGrey))
+      ScreenContainer(
+          child: Divider(
+              color: (dividerColor != null ? dividerColor : lighterGrey)))
     ]);
   }
 }

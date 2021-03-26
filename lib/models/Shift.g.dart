@@ -63,15 +63,18 @@ class ShiftAdapter extends TypeAdapter<Shift> {
       endTime: fields[3] as DateTime,
       weekDays: (fields[4] as List)?.cast<String>(),
       status: fields[6] as ShiftStatus,
+      intervalBetweenBooking: fields[9] as int,
+      rollingDaysBooking: fields[10] as int,
       createdAt: fields[7] as DateTime,
       updatedAt: fields[8] as DateTime,
+      maxNumberOfGuests: fields[11] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Shift obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -89,7 +92,13 @@ class ShiftAdapter extends TypeAdapter<Shift> {
       ..writeByte(7)
       ..write(obj.createdAt)
       ..writeByte(8)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(9)
+      ..write(obj.intervalBetweenBooking)
+      ..writeByte(10)
+      ..write(obj.rollingDaysBooking)
+      ..writeByte(11)
+      ..write(obj.maxNumberOfGuests);
   }
 
   @override

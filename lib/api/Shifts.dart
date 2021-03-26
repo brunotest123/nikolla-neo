@@ -22,7 +22,10 @@ class Shifts {
           path: "/places/${place.id}/shifts",
           params: shift.toMap(ignoreId: true));
 
-  update({@required Domain domain, @required Place place, Shift shift}) =>
+  update(
+          {@required Domain domain,
+          @required Place place,
+          @required Shift shift}) =>
       _httpService.put(
           domain: domain,
           path: "/places/${place.id}/shifts/${shift.id}",

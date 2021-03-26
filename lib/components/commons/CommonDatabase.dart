@@ -24,6 +24,7 @@ class CommonDatabase {
     Hive.registerAdapter(ProductStatusAdapter());
     Hive.registerAdapter(SessionAdapter());
     Hive.registerAdapter(ShiftAdapter());
+    Hive.registerAdapter(ShiftStatusAdapter());
     Hive.registerAdapter(GuestProfileAdapter());
     Hive.registerAdapter(HostProfileAdapter());
 
@@ -84,6 +85,7 @@ class CommonDatabase {
     Box _hostPlacesTableBox = await Hive.openBox<Place>(hostPlacesTable);
     Box _guestPlacesTableBox = await Hive.openBox<Place>(guestPlacesTable);
     Box _draftShiftBox = await Hive.openBox<Shift>(draftShiftsTable);
+    Box _guestBookingBox = await Hive.openBox<Booking>(guestBookingsTable);
 
     await _sessionBox.clear();
 
@@ -94,5 +96,6 @@ class CommonDatabase {
     await _hostPlacesTableBox.clear();
     await _guestPlacesTableBox.clear();
     await _draftShiftBox.clear();
+    await _guestBookingBox.clear();
   }
 }

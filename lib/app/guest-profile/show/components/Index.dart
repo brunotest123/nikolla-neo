@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:nikolla_neo/api/Users.dart';
-import 'package:nikolla_neo/app/guest-profile/show/components/BoxOptions.dart';
+// import 'package:nikolla_neo/app/guest-profile/show/components/BoxOptions.dart';
 import 'package:nikolla_neo/app/guest-profile/show/components/MainOptions.dart';
 import 'package:nikolla_neo/app/guest-profile/show/components/SwitchHostOption.dart';
+import 'package:nikolla_neo/components/commons/BoxOptions.dart';
 import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/models/User.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
@@ -16,10 +17,12 @@ class Index extends StatelessWidget {
   Index({@required this.arrowNotification}) : assert(arrowNotification != null);
 
   _fetchUser() async {
-    User user = await Users().show();
+    try {
+      User user = await Users().show();
 
-    Box<User> usersBox = Hive.box<User>(usersTable);
-    usersBox.putAt(0, user);
+      Box<User> usersBox = Hive.box<User>(usersTable);
+      usersBox.putAt(0, user);
+    } catch (e) {}
   }
 
   _logout() async {
@@ -44,6 +47,7 @@ class Index extends StatelessWidget {
               ),
               SwitchHostOption(),
               BoxOptions(
+                dividerColor: darkGrey,
                 titleText: "My bookings",
                 onTap: () {},
               ),

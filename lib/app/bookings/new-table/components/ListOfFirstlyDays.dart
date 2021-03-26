@@ -13,6 +13,8 @@ class ListOfFirstlyDays extends StatelessWidget {
   Widget build(BuildContext context) {
     List<DateTime> availability = booking.place.fetchAvailability();
 
+    print(availability);
+
     return Container(
         height: 70.0,
         child: ListView.builder(
@@ -27,10 +29,13 @@ class ListOfFirstlyDays extends StatelessWidget {
     Widget subTitleView = RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: DateFormat("E, MMM dd").format(dateTime) + "\n",
+          text: DateFormat("E, MMM dd", this.booking.place.locale)
+                  .format(dateTime) +
+              "\n",
           children: <TextSpan>[
             TextSpan(
-                text: DateFormat("HH:mm").format(dateTime),
+                text: DateFormat("HH:mm", this.booking.place.locale)
+                    .format(dateTime),
                 style: TextStyle(fontWeight: FontWeight.w600)),
           ],
           style: TextStyle(

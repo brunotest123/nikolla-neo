@@ -5,12 +5,12 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nikolla_neo/api/Domain.dart';
 import 'package:nikolla_neo/api/Shifts.dart';
-import 'package:nikolla_neo/app/products/edit/Options.dart';
 import 'package:nikolla_neo/app/shifts/new/components/ShiftForm.dart';
 import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/components/commons/DisableButton.dart';
 import 'package:nikolla_neo/components/commons/SubmitButton.dart';
 import 'package:nikolla_neo/components/commons/Validators.dart';
+import 'package:nikolla_neo/components/commons/BoxOptions.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Shift.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
@@ -49,7 +49,7 @@ class NameForm extends StatelessWidget with ShiftForm {
   bool _timeRangeValid(Shift shift) {
     if (shift.startTime == null) return false;
     if (shift.endTime == null) return false;
-    if (shift.startTime.difference(shift.endTime).inMinutes > 0) return false;
+    if (shift.startTime.difference(shift.endTime).inMinutes >= 0) return false;
 
     return true;
   }

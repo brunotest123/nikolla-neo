@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:nikolla_neo/api/clients/Serealizable.dart';
+import 'package:nikolla_neo/components/commons/ShiftAvailable.dart';
 import 'package:nikolla_neo/models/Product.dart';
 import 'package:nikolla_neo/models/Shift.dart';
 
@@ -19,7 +20,6 @@ class Place extends Equatable {
   final String name;
   @HiveField(2)
   final String description;
-
   @HiveField(3)
   final String addressOne;
   @HiveField(4)
@@ -42,6 +42,8 @@ class Place extends Equatable {
   final double lat;
   @HiveField(13)
   final double lng;
+  @HiveField(14)
+  final String timeZone;
 
   Place(
       {this.id,
@@ -56,10 +58,15 @@ class Place extends Equatable {
       this.locale,
       this.lat,
       this.lng,
+      this.timeZone,
       this.products,
       this.shifts});
 
   String addressInfo() => [this.addressOne, this.addressTwo]
+      .where((element) => element != null)
+      .join(', ');
+
+  String addressComplement() => [this.city, this.county, this.postalCode]
       .where((element) => element != null)
       .join(', ');
 
@@ -76,6 +83,7 @@ class Place extends Equatable {
     if (this.county != null) map['county'] = this.county;
     if (this.country != null) map['country'] = this.country;
     if (this.locale != null) map['locale'] = this.locale;
+    if (this.timeZone != null) map['time_zone'] = this.timeZone;
     if (this.products != null)
       map['products'] = this.products.map((e) => e.toMap()).toList();
     if (this.shifts != null)
@@ -98,6 +106,7 @@ class Place extends Equatable {
         county: map['county'],
         country: map['country'],
         locale: map['locale'],
+        timeZone: map['time_zone'],
         lat: (map['latitude'] is String
             ? double.parse(map['latitude'])
             : map['latitude']),
@@ -132,16 +141,7 @@ class Place extends Equatable {
     }
   }
 
-  List<DateTime> fetchAvailability() {
-    return [
-      DateTime.parse('2020-01-12 09:00'),
-      DateTime.parse('2020-01-12 09:30'),
-      DateTime.parse('2020-01-12 10:00'),
-      DateTime.parse('2020-01-12 10:30'),
-      DateTime.parse('2020-01-12 11:30'),
-      DateTime.parse('2020-01-12 12:30')
-    ];
-  }
+  List<DateTime> fetchAvailability() => ShiftAvailable(place: this).fetch();
 
   factory Place.fromJson(String source) => Place.fromMap(json.decode(source));
 

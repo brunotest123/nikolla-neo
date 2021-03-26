@@ -36,6 +36,8 @@ class Booking extends Equatable {
   final Place place;
   @HiveField(10)
   final Shift shift;
+  @HiveField(11)
+  final int numOfTable;
 
   Booking(
       {this.id,
@@ -48,22 +50,28 @@ class Booking extends Equatable {
       this.updatedAt,
       this.user,
       this.place,
-      this.shift});
+      this.shift,
+      this.numOfTable});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'start_at': startAt?.toString(),
-      'end_at': endAt?.toString(),
-      'kind': kind,
-      'num_guest': numGuest,
-      'status': status,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'user': user?.toMap(),
-      'place': place?.toMap(),
-      'shift': shift?.toMap()
-    };
+  Map<String, dynamic> toMap({bool ignoreId}) {
+    Map<String, dynamic> map = Map<String, dynamic>();
+
+    if (this.id != null && ignoreId != true) map['id'] = this.id;
+    if (this.startAt != null) map['start_at'] = this.startAt.toString();
+    if (this.endAt != null) map['end_at'] = this.endAt.toString();
+    if (this.kind != null) map['kind'] = this.kind.toString();
+    if (this.numGuest != null) map['num_guest'] = this.numGuest;
+    if (this.numOfTable != null) map['num_of_table'] = this.numOfTable;
+    if (this.status != null) map['status'] = this.status;
+    if (this.createdAt != null) map['created_at'] = this.createdAt.toString();
+    if (this.updatedAt != null) map['updated_at'] = this.updatedAt.toString();
+    if (this.user != null && ignoreId != true) map['user'] = this.user.toMap();
+    if (this.shift != null && ignoreId != true)
+      map['shift'] = this.shift.toMap();
+    if (this.place != null && ignoreId != true)
+      map['place'] = this.place.toMap();
+
+    return map;
   }
 
   factory Booking.fromMap(Map<String, dynamic> map) {
@@ -76,6 +84,7 @@ class Booking extends Equatable {
         endAt: (map['end_at'] == null ? null : DateTime.parse(map['end_at'])),
         kind: map['kind'],
         numGuest: map['num_guest']?.toInt(),
+        numOfTable: map['num_of_table'],
         status: map['status'],
         createdAt: (map['created_at'] == null
             ? null
@@ -85,7 +94,7 @@ class Booking extends Equatable {
             : DateTime.parse(map['updated_at'])),
         user: User.fromMap(map['user']),
         place: Place.fromMap(map['place']),
-        shift: (map['shift'] == null ? null : Shift.fromMap(map['shift'])));
+        shift: Shift.fromMap(map['shift']));
   }
 
   String toJson() => json.encode(toMap());

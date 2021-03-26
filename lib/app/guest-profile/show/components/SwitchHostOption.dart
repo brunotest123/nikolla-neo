@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:nikolla_neo/app/guest-profile/show/components/BoxOptions.dart';
+import 'package:nikolla_neo/components/commons/BoxOptions.dart';
 import 'package:nikolla_neo/models/User.dart';
+import 'package:nikolla_neo/styleguide/colors.dart';
 
 import '../../../place/list/components/Index.dart' as placeList;
 
@@ -18,6 +19,7 @@ class SwitchHostOption extends StatelessWidget {
 
         if (_initalValue.policies.contains(Policy.nikers)) {
           return BoxOptions(
+              dividerColor: darkGrey,
               titleText: "Switch to host",
               onTap: () {
                 showCupertinoModalPopup(

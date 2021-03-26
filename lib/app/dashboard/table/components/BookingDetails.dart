@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:nikolla_neo/models/Place.dart';
+import 'package:nikolla_neo/models/Booking.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 
-class PlaceDetails extends StatelessWidget {
-  final Place place;
+class BookingDetails extends StatelessWidget {
+  final Booking booking;
 
-  PlaceDetails({@required this.place}) : assert(place != null);
+  BookingDetails({@required this.booking}) : assert(booking != null);
 
   @override
   Widget build(BuildContext context) => Column(children: [
         Padding(padding: EdgeInsets.only(top: 30)),
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(place.name,
+            child: Text(booking.place.name,
                 style: TextStyle(
                   fontFamily: 'SFUIText',
                   color: yellowNik,
@@ -24,7 +24,7 @@ class PlaceDetails extends StatelessWidget {
         Padding(padding: EdgeInsets.only(top: 10)),
         Align(
             alignment: Alignment.centerLeft,
-            child: Text("Marc 31, 2021",
+            child: Text(booking.startAt.toString(),
                 style: TextStyle(
                   fontFamily: 'SFUIText',
                   color: whiteDiv,
@@ -50,7 +50,8 @@ class PlaceDetails extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Row(children: [
               Expanded(
-                  child: Text("2 guests",
+                  child: Text(
+                      "${booking.numGuest} guest${booking.numGuest > 1 ? "s" : ""}",
                       style: TextStyle(
                         fontFamily: 'SFUIText',
                         color: whiteDiv,
