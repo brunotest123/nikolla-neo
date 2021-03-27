@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:nikolla_neo/api/clients/CloudinaryShared.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nikolla_neo/api/clients/CloudinaryShared.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 
 class UploadPictureWidget {
@@ -15,16 +15,14 @@ class UploadPictureWidget {
   getImage(bool isCamera) async {
     Navigator.of(context).pop();
 
-    return;
+    PickedFile pickedFile = await ImagePicker().getImage(
+        source: (isCamera ? ImageSource.camera : ImageSource.gallery));
 
-    // PickedFile pickedFile = await ImagePicker().getImage(
-    //     source: (isCamera ? ImageSource.camera : ImageSource.gallery));
+    if (pickedFile == null) return;
 
-    // if (pickedFile == null) return;
+    String publicId = await CloudinaryShared.instance.getPublicId(pickedFile);
 
-    // String publicId = await CloudinaryShared.instance.getPublicId(pickedFile);
-
-    // this.afterSaved(publicId);
+    this.afterSaved(publicId);
   }
 
   Widget _actionSheet() {

@@ -59,6 +59,7 @@ class NewUserSessionController extends BaseController {
   }
 
   Future<User> _fetchUser() async {
+    print('fetch User');
     User user;
 
     try {

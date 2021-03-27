@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/api/Domain.dart';
+import 'package:nikolla_neo/api/Products.dart';
+import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/components/commons/MainOptions.dart';
 import 'package:nikolla_neo/app/products/edit/WeekDaysAvailablity.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
@@ -18,6 +21,25 @@ class Options extends StatelessWidget {
   Options({@required this.product, @required this.place})
       : assert(product != null && place != null);
 
+  _fetchImage(String publicId) async {
+    Product image = Product(id: product.id, coverImagePath: publicId);
+
+    Product _product = await Products()
+        .save(domain: Domain.hosts, place: this.place, product: image);
+
+    Place result = Place.fromMap(this.place.toMap());
+
+    int _index = result.products.indexWhere((element) => element == _product);
+
+    if (_index == -1) {
+      result.products.add(_product);
+    } else {
+      result.products[_index] = _product;
+    }
+
+    await CommonDatabase.update<Place>(table: hostPlacesTable, data: result);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -26,7 +48,10 @@ class Options extends StatelessWidget {
           titleText: 'Avatar',
           onTap: () {
             UploadPictureWidget(
-                    afterSaved: (String publicId) {}, context: context)
+                    afterSaved: (String publicId) {
+                      _fetchImage(publicId);
+                    },
+                    context: context)
                 .openDialog();
           }),
       BoxOptions(

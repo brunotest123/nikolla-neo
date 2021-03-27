@@ -15,16 +15,12 @@ class ApiProvider {
       {String path, Map<String, dynamic> params}) async {
     Dio instance = await _getInstance();
 
-    _requestData('POST', path, params);
-
     return _responseData(await instance.post(path, data: params));
   }
 
   static Future<Response<Map>> put(
       {String path, Map<String, dynamic> params}) async {
     Dio instance = await _getInstance();
-
-    _requestData('PUT', path, params);
 
     return _responseData(await instance.put(path, data: params));
   }
@@ -33,17 +29,7 @@ class ApiProvider {
       {String path, Map<String, dynamic> params}) async {
     Dio instance = await _getInstance();
 
-    _requestData('GET', path, params);
-
     return _responseData(await instance.get(path, queryParameters: params));
-  }
-
-  static void _requestData(
-      String method, String path, Map<String, dynamic> params) {
-    developer.log("METHOD: GET");
-    developer.log("PATH: $path");
-    developer.log('Request BODY:');
-    _loggerNoStack.v(params);
   }
 
   static Response<Map> _responseData(Response<Map> response) {
@@ -67,24 +53,26 @@ class ApiProvider {
 
     Dio dio = new Dio(options);
 
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      options.headers['app-secret-token-key'] = ServerConfig.appSecret;
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        developer.log('host: ${ServerConfig.hostName}');
+        developer.log('REQUEST[${options.method}] => PATH: ${options.path}');
+        options.headers['app-secret-token-key'] = ServerConfig.appSecret;
 
-      if (currentSession == null) return;
+        if (currentSession != null) {
+          if (currentSession.id != null)
+            options.headers["session-token-key"] = currentSession.id;
 
-      if (currentSession.id != null)
-        options.headers["session-token-key"] = currentSession.id;
+          if (currentSession.refreshToken != null)
+            options.headers['session-refresh-key'] =
+                currentSession.refreshToken;
+          developer.log("session-refresh-key: ${currentSession.refreshToken}");
+          developer.log("session-salt-key: ${currentSession.salt}");
+        }
 
-      if (currentSession.refreshToken != null)
-        options.headers['session-refresh-key'] = currentSession.refreshToken;
-    }));
-
-    if (currentSession != null) {
-      developer.log('host: ${ServerConfig.hostName}');
-      developer.log("session-refresh-key: ${currentSession.refreshToken}");
-      developer.log("session-salt-key: ${currentSession.salt}");
-    }
+        return handler.next(options);
+      },
+    ));
 
     return dio;
   }

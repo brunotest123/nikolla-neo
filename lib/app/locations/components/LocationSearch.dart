@@ -26,7 +26,7 @@ class LocationSearch extends StatefulWidget {
 class _LocationSearchState extends State<LocationSearch>
     with WidgetsBindingObserver {
   final ValueNotifier<String> _textFilledNotifier = ValueNotifier("");
-  GeocodingResponse _response = GeocodingResponse('', '', []);
+  GeocodingResponse _response = GeocodingResponse(status: '', results: []);
   bool _requestPermission = false;
 
   _searchLocation(String value) async {
@@ -47,7 +47,7 @@ class _LocationSearchState extends State<LocationSearch>
       Position position = await Geolocator.getLastKnownPosition(
           forceAndroidLocationManager: Platform.isAndroid);
       widget.afterChooseLocation(
-          Location(position.latitude, position.longitude), context);
+          Location(lat: position.latitude, lng: position.longitude), context);
       return;
     } catch (e) {}
   }
