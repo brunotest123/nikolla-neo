@@ -45,6 +45,7 @@ class Options extends StatelessWidget {
           }),
       BoxOptions(
           titleText: 'Location',
+          subTitleText: place.fullAddress(),
           onTap: () {
             showCupertinoModalPopup(
                 context: context,

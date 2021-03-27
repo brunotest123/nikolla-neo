@@ -17,7 +17,7 @@ class PlaceTile extends StatelessWidget {
             right: 5,
             child: ListTile(
               title: Text(place.name),
-              subtitle: Text("address info"),
+              subtitle: Text(place.fullAddress()),
               trailing: Icon(Icons.keyboard_arrow_right),
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
               onTap: () {

@@ -32,13 +32,14 @@ class PlaceAdapter extends TypeAdapter<Place> {
       timeZone: fields[14] as String,
       products: (fields[9] as List)?.cast<Product>(),
       shifts: (fields[10] as List)?.cast<Shift>(),
+      coverImagePath: fields[15] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Place obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -68,7 +69,9 @@ class PlaceAdapter extends TypeAdapter<Place> {
       ..writeByte(13)
       ..write(obj.lng)
       ..writeByte(14)
-      ..write(obj.timeZone);
+      ..write(obj.timeZone)
+      ..writeByte(15)
+      ..write(obj.coverImagePath);
   }
 
   @override

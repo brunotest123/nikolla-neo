@@ -35,7 +35,7 @@ class AddressForm extends StatelessWidget with PlaceForm {
       body: CustomScrollView(slivers: [
         SliverFillRemaining(
             child: ScreenContainer(
-                child: Column(children: [
+                child: ListView(children: [
           TextFormField(
             textCapitalization: TextCapitalization.words,
             decoration: const InputDecoration(

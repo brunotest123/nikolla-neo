@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nikolla_neo/components/commons/MainOptions.dart';
 import 'package:nikolla_neo/app/products/edit/WeekDaysAvailablity.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
+import 'package:nikolla_neo/components/widgets/UploadPictureWidget.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Product.dart';
 
@@ -21,7 +22,13 @@ class Options extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       MainOptions(titleText: "Details"),
-      BoxOptions(titleText: 'Avatar', onTap: () {}),
+      BoxOptions(
+          titleText: 'Avatar',
+          onTap: () {
+            UploadPictureWidget(
+                    afterSaved: (String publicId) {}, context: context)
+                .openDialog();
+          }),
       BoxOptions(
           titleText: 'Main info',
           subTitleText: "title, category and sale amount",

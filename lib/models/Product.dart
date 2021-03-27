@@ -45,6 +45,8 @@ class Product extends Equatable {
   final ProductStatus status;
   @HiveField(9)
   final List<String> exclusiveWeekDays;
+  @HiveField(10)
+  final String coverImagePath;
 
   Product(
       {this.id,
@@ -56,7 +58,8 @@ class Product extends Equatable {
       this.updatedAt,
       this.description,
       this.status,
-      this.exclusiveWeekDays});
+      this.exclusiveWeekDays,
+      this.coverImagePath});
 
   String weekDaysAvailable(BuildContext context) =>
       (this.exclusiveWeekDays.length == 0 || this.exclusiveWeekDays.length == 7
@@ -77,6 +80,9 @@ class Product extends Equatable {
     if (this.createdAt != null) map['created_at'] = this.createdAt.toString();
     if (this.updatedAt != null) map['updated_at'] = this.updatedAt.toString();
     if (this.status != null) map['status'] = productStatusString[this.status];
+    if (this.coverImagePath != null)
+      map['cover_image_path'] =
+          (this.coverImagePath == '' ? null : this.coverImagePath);
     if (this.exclusiveWeekDays != null)
       map['exclusive_week_days'] = this.exclusiveWeekDays.toList();
 
@@ -94,6 +100,8 @@ class Product extends Equatable {
         description: map['description'],
         ordering: map['ordering'],
         status: EnumToString.fromString(ProductStatus.values, map['status']),
+        coverImagePath:
+            (map['cover_image_path'] == '' ? null : map['cover_image_path']),
         exclusiveWeekDays:
             exclusiveWeekDaysParsed.map((i) => i.toString()).toList(),
         createdAt: (map['created_at'] == null

@@ -67,7 +67,8 @@ class ApiProvider {
 
     Dio dio = new Dio(options);
 
-    dio.interceptors.add(InterceptorsWrapper(onRequest: (Options options) {
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
       options.headers['app-secret-token-key'] = ServerConfig.appSecret;
 
       if (currentSession == null) return;

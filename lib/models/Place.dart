@@ -44,6 +44,8 @@ class Place extends Equatable {
   final double lng;
   @HiveField(14)
   final String timeZone;
+  @HiveField(15)
+  final String coverImagePath;
 
   Place(
       {this.id,
@@ -60,14 +62,21 @@ class Place extends Equatable {
       this.lng,
       this.timeZone,
       this.products,
-      this.shifts});
+      this.shifts,
+      this.coverImagePath});
+
+  String fullAddress() => [addressInfo(), addressComplement()]
+      .where((element) => element != null)
+      .join(', ');
 
   String addressInfo() => [this.addressOne, this.addressTwo]
       .where((element) => element != null)
+      .map((e) => e.trim())
       .join(', ');
 
   String addressComplement() => [this.city, this.county, this.postalCode]
       .where((element) => element != null)
+      .map((e) => e.trim())
       .join(', ');
 
   Map<String, dynamic> toMap({bool ignoreId}) {
@@ -84,6 +93,9 @@ class Place extends Equatable {
     if (this.country != null) map['country'] = this.country;
     if (this.locale != null) map['locale'] = this.locale;
     if (this.timeZone != null) map['time_zone'] = this.timeZone;
+    if (this.coverImagePath != null)
+      map['cover_image_path'] =
+          (this.coverImagePath == '' ? null : this.coverImagePath);
     if (this.products != null)
       map['products'] = this.products.map((e) => e.toMap()).toList();
     if (this.shifts != null)
@@ -107,6 +119,8 @@ class Place extends Equatable {
         country: map['country'],
         locale: map['locale'],
         timeZone: map['time_zone'],
+        coverImagePath:
+            (map['cover_image_path'] == '' ? null : map['cover_image_path']),
         lat: (map['latitude'] is String
             ? double.parse(map['latitude'])
             : map['latitude']),
