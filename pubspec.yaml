@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   app_settings: 4.0.0
   autocomplete_textfield: ^1.7.3
+  cached_network_image: any
   country_code_picker: ^1.7.0
   cupertino_icons: ^1.0.0
   currency_text_input_formatter: ^2.0.0

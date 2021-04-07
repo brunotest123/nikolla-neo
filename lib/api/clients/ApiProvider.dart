@@ -55,8 +55,16 @@ class ApiProvider {
 
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        developer.log('host: ${ServerConfig.hostName}');
+        developer.log('HOST: ${ServerConfig.hostName}');
         developer.log('REQUEST[${options.method}] => PATH: ${options.path}');
+
+        if (options.queryParameters != null || options.queryParameters != {})
+          developer
+              .log("REQUEST[queryStringParams] => ${options.queryParameters}");
+
+        if (options.data != null)
+          developer.log("REQUEST[body] => ${options.data}");
+
         options.headers['app-secret-token-key'] = ServerConfig.appSecret;
 
         if (currentSession != null) {
@@ -66,9 +74,9 @@ class ApiProvider {
           if (currentSession.refreshToken != null)
             options.headers['session-refresh-key'] =
                 currentSession.refreshToken;
-          developer.log("session-refresh-key: ${currentSession.refreshToken}");
-          developer.log("session-salt-key: ${currentSession.salt}");
         }
+
+        developer.log("REQUEST[headers]: ${options.headers}");
 
         return handler.next(options);
       },

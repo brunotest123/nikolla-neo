@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:nikolla_neo/api/Domain.dart';
+import 'package:nikolla_neo/api/Places.dart';
 import 'package:nikolla_neo/app/place/edit/components/AddressForm.dart';
 import 'package:nikolla_neo/app/place/edit/components/DescriptionForm.dart';
 import 'package:nikolla_neo/app/place/edit/components/TitleForm.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
+import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
+import 'package:nikolla_neo/components/widgets/UploadPictureWidget.dart';
 
 import '../../../products/list/components/Index.dart' as productList;
 import '../../../shifts/list/components/Index.dart' as shiftList;
@@ -19,11 +23,30 @@ class Options extends StatelessWidget {
   Options({@required this.box, @required this.place})
       : assert(box != null && place != null);
 
+  _fetchImage(String publicId) async {
+    Place result = await Places().update(
+        domain: Domain.hosts,
+        place: Place(id: place.id, coverImagePath: publicId));
+
+    await CommonDatabase.update<Place>(table: hostPlacesTable, data: result);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       MainOptions(titleText: "About this place"),
-      BoxOptions(titleText: 'Photos', onTap: () {}),
+      BoxOptions(
+          titleText: 'Photos',
+          coverImagePath: this.place.coverImagePath,
+          onTap: () {
+            UploadPictureWidget(
+                    removeOptions: true,
+                    afterSaved: (String publicId) {
+                      _fetchImage(publicId);
+                    },
+                    context: context)
+                .openDialog();
+          }),
       BoxOptions(
           titleText: 'Title',
           subTitleText: place.name,

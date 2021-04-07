@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/api/clients/CloudinaryShared.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Product.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../edit/Index.dart' as productEdit;
 
@@ -23,10 +25,29 @@ class ProductTile extends StatelessWidget {
                     return productEdit.Index(place: place, product: product);
                   });
             },
-            leading: CircleAvatar(
-                child: Icon(Icons.camera_alt_outlined, color: lightGrey),
-                backgroundColor: darkGreyFive),
+            leading: _avatar(),
             title: Text(product.name)),
         Divider()
       ]);
+
+  Widget _avatar() {
+    if (product.coverImagePath == null || product.coverImagePath == "") {
+      return CircleAvatar(
+          child: Icon(Icons.camera_alt_outlined, color: lightGrey),
+          backgroundColor: darkGreyFive);
+    }
+
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: Container(
+            height: 40.0,
+            width: 40.0,
+            child: CachedNetworkImage(
+                imageUrl: CloudinaryShared.imageThumbAvatar(
+                    publicId: product.coverImagePath),
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.high,
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()))));
+  }
 }

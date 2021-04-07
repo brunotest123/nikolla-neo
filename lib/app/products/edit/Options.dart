@@ -45,9 +45,11 @@ class Options extends StatelessWidget {
     return Column(children: [
       MainOptions(titleText: "Details"),
       BoxOptions(
-          titleText: 'Avatar',
+          titleText: 'Photos',
+          coverImagePath: this.product.coverImagePath,
           onTap: () {
             UploadPictureWidget(
+                    removeOptions: true,
                     afterSaved: (String publicId) {
                       _fetchImage(publicId);
                     },

@@ -4,10 +4,12 @@ import 'package:nikolla_neo/api/clients/CloudinaryShared.dart';
 import 'package:nikolla_neo/styleguide/colors.dart';
 
 class UploadPictureWidget {
-  BuildContext context;
-  Function afterSaved;
+  final BuildContext context;
+  final Function afterSaved;
+  final bool removeOptions;
 
-  UploadPictureWidget({this.context, this.afterSaved});
+  UploadPictureWidget(
+      {@required this.context, @required this.afterSaved, this.removeOptions});
 
   openDialog() => showCupertinoModalPopup(
       context: context, builder: (BuildContext context) => _actionSheet());
@@ -29,13 +31,21 @@ class UploadPictureWidget {
     return CupertinoActionSheet(
       cancelButton: new CupertinoDialogAction(
         isDefaultAction: true,
-        child: new Text("Cancel", style: TextStyle(color: error)),
+        child: new Text("Cancel", style: TextStyle(color: darkGreyTwo)),
         onPressed: () {
           Navigator.of(context).pop();
         },
       ),
       title: new Text("Select your picture source"),
       actions: <Widget>[
+        (this.removeOptions == true
+            ? CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  this.afterSaved('');
+                },
+                child: new Text("Remove", style: TextStyle(color: error)))
+            : Container()),
         new CupertinoDialogAction(
             onPressed: () {
               getImage(false);
