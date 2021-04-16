@@ -1,5 +1,5 @@
 class ServerConfig {
-  static String hostName = "http://localhost:9091";
+  static String hostName = "https://nikdev.eu.ngrok.io";
   static String appSecret = "abcKiju";
   static String googleMapsApiKey = "AIzaSyBs4XQdX6LeX_pyFbrxiwjvr_uxOxv7DE4";
   static String cloudinaryApiKey = "491655478227356";

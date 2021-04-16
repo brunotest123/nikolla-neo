@@ -63,8 +63,8 @@ class Session extends Equatable {
     if (this.refreshToken != null) mapData['refresh_token'] = this.refreshToken;
     if (this.securityToken != null)
       mapData['security_token'] = this.securityToken;
-    mapData['lat'] = this.lat;
-    mapData['lng'] = this.lng;
+    if (this.lat != null) mapData['lat'] = this.lat;
+    if (this.lng != null) mapData['lng'] = this.lng;
     if (this.location != null) mapData['location'] = this.location;
 
     return mapData;
