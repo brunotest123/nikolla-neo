@@ -19,8 +19,8 @@ class EnablePlace extends StatelessWidget with PlaceForm {
   @override
   fetchValue(BuildContext context) async {
     EasyLoading.show();
-    await Places().update(domain: Domain.hosts, place: Place.fromMap(map));
-    await CommonDatabase.update<Place>(table: hostPlacesTable, data: Place.fromMap(map));
+    Place result = await Places().update(domain: Domain.hosts, place: Place.fromMap(map));
+    await CommonDatabase.update<Place>(table: hostPlacesTable, data: result);
     EasyLoading.dismiss();
   }
 
