@@ -86,8 +86,8 @@ class Session extends Equatable {
             : null),
         refreshToken: map['refresh_token'],
         location: map['location'],
-        lat: (map['lat'] is String ? double.parse(map['lat']) : map['lat']),
-        lng: (map['lng'] is String ? double.parse(map['lng']) : map['lng']));
+        lat: map['lat'] == null ? null : (map['lat'] is String ? double.parse(map['lat']) : map['lat']),
+        lng: map['lng'] == null ? null : (map['lng'] is String ? double.parse(map['lng']) : map['lng']));
   }
 
   Future<String> findLocation() async {

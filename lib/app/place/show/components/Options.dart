@@ -13,6 +13,8 @@ import 'package:nikolla_neo/styleguide/colors.dart';
 import 'package:nikolla_neo/styleguide/screen-container.dart';
 import 'package:nikolla_neo/components/widgets/UploadPictureWidget.dart';
 
+import '../../edit/components/EnablePlace.dart';
+
 import '../../../products/list/components/Index.dart' as productList;
 import '../../../shifts/list/components/Index.dart' as shiftList;
 
@@ -77,6 +79,7 @@ class Options extends StatelessWidget {
                 });
           }),
       MainOptions(titleText: "Settings"),
+      EnablePlace(place: place),
       BoxOptions(
           titleText: 'Products',
           onTap: () {

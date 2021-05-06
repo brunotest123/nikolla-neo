@@ -35,8 +35,8 @@ class PhoneNumberTextField extends StatelessWidget {
   Widget _countryCode() => Center(
         child: CountryCodePicker(
             textStyle: _defaultStyle,
-            onChanged: (countryCode) {
-              onCountryChange(countryCode);
+            onChanged: (CountryCode countryCode) {
+              onCountryChange(countryCode.code);
             },
             initialSelection: initialSelection),
       );

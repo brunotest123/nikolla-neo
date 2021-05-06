@@ -32,7 +32,7 @@ class List extends StatelessWidget {
             right: 0,
             child: ValueListenableBuilder(
                 valueListenable: Hive.box<Place>(hostPlacesTable).listenable(),
-                builder: (context, Box<Place> box, child) {
+                builder: (context, Box<Place> box, child) {                  
                   if (box.values.isEmpty) {
                     return Center(child: Text('no places'));
                   }
