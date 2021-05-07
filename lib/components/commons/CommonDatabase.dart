@@ -20,6 +20,7 @@ class CommonDatabase {
     Hive.registerAdapter(MoneyAdapter());
     Hive.registerAdapter(PolicyAdapter());
     Hive.registerAdapter(PlaceAdapter());
+    Hive.registerAdapter(PlaceStatusAdapter());
     Hive.registerAdapter(ProductAdapter());
     Hive.registerAdapter(ProductStatusAdapter());
     Hive.registerAdapter(SessionAdapter());

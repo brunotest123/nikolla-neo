@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:nikolla_neo/api/clients/Serealizable.dart';
@@ -11,6 +12,19 @@ part 'Place.g.dart';
 
 const String hostPlacesTable = "host_places";
 const String guestPlacesTable = "guest_places";
+
+@HiveType(typeId: 12)
+enum PlaceStatus {
+  @HiveField(0)
+  maintenance,
+  @HiveField(1)
+  online
+}
+
+const placeStatusString = <PlaceStatus, String>{
+  PlaceStatus.maintenance: "maintenance",
+  PlaceStatus.online: 'online'
+};
 
 @HiveType(typeId: 4)
 class Place extends Equatable {
@@ -46,6 +60,8 @@ class Place extends Equatable {
   final String timeZone;
   @HiveField(15)
   final String coverImagePath;
+  @HiveField(16)
+  final PlaceStatus status;
 
   Place(
       {this.id,
@@ -63,7 +79,8 @@ class Place extends Equatable {
       this.timeZone,
       this.products,
       this.shifts,
-      this.coverImagePath});
+      this.coverImagePath,
+      this.status});
 
   String fullAddress() => [addressInfo(), addressComplement()]
       .where((element) => element != null)
@@ -100,11 +117,13 @@ class Place extends Equatable {
       map['products'] = this.products.map((e) => e.toMap()).toList();
     if (this.shifts != null)
       map['shifts'] = this.shifts.map((e) => e.toMap()).toList();
+    if (this.status != null) map['status'] = placeStatusString[this.status];
 
     return map;
   }
 
   factory Place.fromMap(Map<String, dynamic> map) {
+
     if (map == null) return null;
 
     return Place(
@@ -128,7 +147,9 @@ class Place extends Equatable {
             ? double.parse(map['longitude'])
             : map['longitude']),
         products: ProductSerializable().fromJsonArray(map['products']),
-        shifts: ShiftSerializable().fromJsonArray(map['shifts']));
+        shifts: ShiftSerializable().fromJsonArray(map['shifts']),
+        status: EnumToString.fromString(PlaceStatus.values, map['status'])
+        );
   }
 
   String toJson() => json.encode(toMap());

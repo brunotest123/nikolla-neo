@@ -6,6 +6,45 @@ part of 'Place.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class PlaceStatusAdapter extends TypeAdapter<PlaceStatus> {
+  @override
+  final int typeId = 12;
+
+  @override
+  PlaceStatus read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return PlaceStatus.maintenance;
+      case 1:
+        return PlaceStatus.online;
+      default:
+        return null;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, PlaceStatus obj) {
+    switch (obj) {
+      case PlaceStatus.maintenance:
+        writer.writeByte(0);
+        break;
+      case PlaceStatus.online:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaceStatusAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class PlaceAdapter extends TypeAdapter<Place> {
   @override
   final int typeId = 4;
@@ -33,13 +72,14 @@ class PlaceAdapter extends TypeAdapter<Place> {
       products: (fields[9] as List)?.cast<Product>(),
       shifts: (fields[10] as List)?.cast<Shift>(),
       coverImagePath: fields[15] as String,
+      status: fields[16] as PlaceStatus,
     );
   }
 
   @override
   void write(BinaryWriter writer, Place obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -71,7 +111,9 @@ class PlaceAdapter extends TypeAdapter<Place> {
       ..writeByte(14)
       ..write(obj.timeZone)
       ..writeByte(15)
-      ..write(obj.coverImagePath);
+      ..write(obj.coverImagePath)
+      ..writeByte(16)
+      ..write(obj.status);
   }
 
   @override

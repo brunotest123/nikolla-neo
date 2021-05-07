@@ -6,9 +6,14 @@ class FetchCurrentLocation {
   static Future<Map<String, dynamic>> call() async {
     Position position = await _fetchPosition();
 
-    if (position == null) return null;
-
-    return {'lat': position.latitude, 'lng': position.longitude};
+    if (position == null) {
+      return {};
+    }
+    
+    return {
+      'lat': (position == null ? null : position.latitude),
+      'lng': (position == null ? null : position.longitude)
+    };
   }
 
   static Future<Position> _fetchPosition() async {
