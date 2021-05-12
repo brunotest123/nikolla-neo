@@ -90,7 +90,7 @@ class FetchGatewayDataController extends BaseController {
 
     if (refreshSession == true) session = await _fetchLocation();
 
-    if (session.lat == null || session.lng == null) {
+    if (session?.lat == null || session?.lng == null) {
       this.screenNotifier.value = location.Index(hiddenClose: true);
       return;
     }
@@ -134,6 +134,8 @@ class FetchGatewayDataController extends BaseController {
   Future<Session> _fetchLocation() async {
     try {
       Map<String, dynamic> map = await FetchCurrentLocation.call();
+
+      if (map == null) return null;
 
       Session session = await Sessions().update(session: Session.fromMap(map));
 

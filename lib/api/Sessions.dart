@@ -13,7 +13,9 @@ class Sessions {
   }
 
   update({@required Session session}) async {
-    return _httpService.put(path: "/v2/sessions", params: session.toMap());
+    return (session.toMap() == {}
+        ? session
+        : _httpService.put(path: "/v2/sessions", params: session.toMap()));
   }
 
   buildSalt({@required Session session}) =>
