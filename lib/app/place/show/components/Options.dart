@@ -79,7 +79,6 @@ class Options extends StatelessWidget {
                 });
           }),
       MainOptions(titleText: "Settings"),
-      EnablePlace(place: place),
       BoxOptions(
           titleText: 'Products',
           onTap: () {
@@ -98,6 +97,7 @@ class Options extends StatelessWidget {
                   return shiftList.Index(place: place);
                 });
           }),
+      EnablePlace(place: place),
     ]);
   }
 }
