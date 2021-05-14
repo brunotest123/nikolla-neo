@@ -15,13 +15,9 @@ class Money {
   Money({@required this.cents, @required this.currencyISO})
       : assert(cents != null && currencyISO != null);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    if (cents != null) data['cents'] = this.cents;
-    if (currencyISO != null) data['currency_iso'] = this.currencyISO;
-
-    return data;
+  toJson(Map<String, dynamic> data, String field) {
+    if (cents != null) data[field + '_cents'] = this.cents;
+    if (currencyISO != null) data[field + '_currency'] = this.currencyISO;
   }
 
   double toDouble() {

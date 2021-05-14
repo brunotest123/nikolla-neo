@@ -28,4 +28,24 @@ class Validators {
 
     return !regex.hasMatch(value);
   }
+
+  static String validateInt(String fieldName, int value, {bool required, int minValue, int maxValue}){
+
+    int valueValidate = (value == null ? 0 : value);
+
+    if (required == true && valueValidate == 0) {
+      return "$fieldName is required";
+    }
+
+    if (minValue != null && valueValidate < minValue) {
+      return "Min ${fieldName.toLowerCase()} value greater than $minValue";
+    }
+
+    if (maxValue != null && valueValidate > maxValue) {
+      return "Max ${fieldName.toLowerCase()} value lower than $maxValue";
+    }
+
+    return null;
+
+  }
 }

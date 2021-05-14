@@ -76,7 +76,7 @@ class Product extends Equatable {
     if (this.description != null) map['description'] = this.description;
     if (this.category != null) map['category_name'] = this.category;
     if (this.ordering != null) map['ordering'] = this.ordering;
-    if (this.sale != null) map['sale'] = this.sale.toJson();
+    if (this.sale != null) this.sale.toJson(map, 'sale');
     if (this.createdAt != null) map['created_at'] = this.createdAt.toString();
     if (this.updatedAt != null) map['updated_at'] = this.updatedAt.toString();
     if (this.status != null) map['status'] = productStatusString[this.status];
@@ -90,6 +90,7 @@ class Product extends Equatable {
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
+
     List<dynamic> exclusiveWeekDaysParsed =
         (map['exclusive_week_days'] == null ? [] : map['exclusive_week_days']);
 

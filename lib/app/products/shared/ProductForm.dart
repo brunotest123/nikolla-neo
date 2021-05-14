@@ -1,5 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:nikolla_neo/api/Domain.dart';
 import 'package:nikolla_neo/api/Products.dart';
 import 'package:nikolla_neo/app/place/edit/components/PlaceForm.dart';
@@ -35,6 +37,7 @@ class _ProductFormState extends State<ProductForm> with PlaceForm {
       map['id'] = widget.product.id;
       map['name'] = widget.product.name;
       map['category_name'] = widget.product.category;
+      map['sale'] = widget.product.sale;
       _controller = TextEditingController(text: widget.product.category);
     }
     super.initState();
@@ -47,7 +50,7 @@ class _ProductFormState extends State<ProductForm> with PlaceForm {
             null) &&
         (Validators.validateText('Description', map['category_name'],
                 required: true, minText: 3, maxText: 30) ==
-            null);
+            null) && (map['sale']['cents'] > 0);
   }
 
   @override
@@ -123,10 +126,12 @@ class _ProductFormState extends State<ProductForm> with PlaceForm {
             top: 40,
             child: TextFormField(
               inputFormatters: [
-                CurrencyTextInputFormatter(locale: widget.place.locale)
+                CurrencyTextInputFormatter(locale: widget.place.locale, symbol: '')
               ],
               keyboardType: TextInputType.number,
-              // initialValue: "EUR" + 1001.11.toString(),
+              initialValue: widget.product != null
+                  ? widget.product.sale.toDouble().toString()
+                  : '0.00',
               decoration: const InputDecoration(
                 icon: Icon(Icons.money),
                 hintText: 'What is the sales amount',
@@ -134,12 +139,26 @@ class _ProductFormState extends State<ProductForm> with PlaceForm {
               ),
               autovalidateMode: AutovalidateMode.always,
               onChanged: (String value) {
-                print(value);
-                // checkForm();
+                if (value.length == 0) {
+                  map['sale'] = {
+                    'cents' : 0
+                  };
+                } else {
+                  map['sale'] = {
+                    'cents': int.parse(value
+                        .replaceAll(",", "")
+                        .replaceAll(".", "")),
+                    'currency_iso': NumberFormat.simpleCurrency(locale : widget.place.locale).currencySymbol
+                  };
+                }
+                checkForm();
               },
               validator: (String value) {
-                return Validators.validateText('Sale amount', value,
-                    required: true, minText: 5, maxText: 30);
+                return Validators.validateInt('Sale amount', value.length == 0 ? 0 : int.parse(value
+                        .substring(3)
+                        .replaceAll(",", "")
+                        .replaceAll(".", "")),
+                    required: true);
               },
             )),
       ]));
