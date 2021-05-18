@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nikolla_neo/app/place/show/components/Options.dart';
 import 'package:nikolla_neo/app/shifts/edit/EnableShift.dart';
+import 'package:nikolla_neo/app/shifts/edit/IntervalBetweenBookingForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/PeriodForm.dart';
 import 'NameForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/WeekDaysForm.dart';
@@ -65,7 +66,14 @@ class Options extends StatelessWidget {
           showArrow: false,
           titleText: "Interval between booking",
           subTitleText: shift.intervalBetweenBooking.toString() + " min",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return IntervalBetweenBookingForm(place: place, shift: shift);
+              },
+            );
+          }),
       BoxOptions(
           showArrow: false,
           titleText: "Rolling days booking",
