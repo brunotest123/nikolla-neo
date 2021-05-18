@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:nikolla_neo/app/place/show/components/Options.dart';
 import 'package:nikolla_neo/app/shifts/edit/EnableShift.dart';
 import 'package:nikolla_neo/app/shifts/edit/IntervalBetweenBookingForm.dart';
+import 'package:nikolla_neo/app/shifts/edit/MaximunNumberOfGuestForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/PeriodForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/RollingDaysBookingForm.dart';
 import 'NameForm.dart';
@@ -91,7 +92,14 @@ class Options extends StatelessWidget {
           showArrow: false,
           titleText: "Maximum number of guest by slot",
           subTitleText: shift.maxNumberOfGuests.toString() + " guests",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return MaximunNumberOfGuestForm(place: place, shift: shift);
+              },
+            );
+          }),
       MainOptions(titleText: "Availability"),
       EnableShift(shift: shift, place: place)
     ]);
