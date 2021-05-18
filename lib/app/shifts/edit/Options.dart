@@ -5,6 +5,7 @@ import 'package:nikolla_neo/app/place/show/components/Options.dart';
 import 'package:nikolla_neo/app/shifts/edit/EnableShift.dart';
 import 'package:nikolla_neo/app/shifts/edit/IntervalBetweenBookingForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/PeriodForm.dart';
+import 'package:nikolla_neo/app/shifts/edit/RollingDaysBookingForm.dart';
 import 'NameForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/WeekDaysForm.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
@@ -78,7 +79,14 @@ class Options extends StatelessWidget {
           showArrow: false,
           titleText: "Rolling days booking",
           subTitleText: shift.rollingDaysBooking.toString() + " days",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return RollingDaysBookingForm(place: place, shift: shift);
+              },
+            );
+          }),
       BoxOptions(
           showArrow: false,
           titleText: "Maximum number of guest by slot",
