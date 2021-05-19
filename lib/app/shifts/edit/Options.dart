@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nikolla_neo/app/place/show/components/Options.dart';
 import 'package:nikolla_neo/app/shifts/edit/EnableShift.dart';
+import 'package:nikolla_neo/app/shifts/edit/IntervalBetweenBookingForm.dart';
+import 'package:nikolla_neo/app/shifts/edit/MaximunNumberOfGuestForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/PeriodForm.dart';
+import 'package:nikolla_neo/app/shifts/edit/RollingDaysBookingForm.dart';
 import 'NameForm.dart';
 import 'package:nikolla_neo/app/shifts/edit/WeekDaysForm.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
@@ -65,17 +68,38 @@ class Options extends StatelessWidget {
           showArrow: false,
           titleText: "Interval between booking",
           subTitleText: shift.intervalBetweenBooking.toString() + " min",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return IntervalBetweenBookingForm(place: place, shift: shift);
+              },
+            );
+          }),
       BoxOptions(
           showArrow: false,
           titleText: "Rolling days booking",
           subTitleText: shift.rollingDaysBooking.toString() + " days",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return RollingDaysBookingForm(place: place, shift: shift);
+              },
+            );
+          }),
       BoxOptions(
           showArrow: false,
           titleText: "Maximum number of guest by slot",
           subTitleText: shift.maxNumberOfGuests.toString() + " guests",
-          onTap: () {}),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return MaximunNumberOfGuestForm(place: place, shift: shift);
+              },
+            );
+          }),
       MainOptions(titleText: "Availability"),
       EnableShift(shift: shift, place: place)
     ]);
