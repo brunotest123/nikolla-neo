@@ -5,6 +5,7 @@ import 'package:nikolla_neo/api/Products.dart';
 import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/components/commons/MainOptions.dart';
 import 'package:nikolla_neo/app/products/edit/WeekDaysAvailablity.dart';
+import 'package:nikolla_neo/app/products/edit/PhotoForm.dart';
 import 'package:nikolla_neo/components/commons/BoxOptions.dart';
 import 'package:nikolla_neo/components/widgets/UploadPictureWidget.dart';
 import 'package:nikolla_neo/models/Place.dart';
@@ -21,24 +22,24 @@ class Options extends StatelessWidget {
   Options({@required this.product, @required this.place})
       : assert(product != null && place != null);
 
-  _fetchImage(String publicId) async {
-    Product image = Product(id: product.id, coverImagePath: publicId);
+  // _fetchImage(String publicId) async {
+  //   Product image = Product(id: product.id, coverImagePath: publicId);
 
-    Product _product = await Products()
-        .save(domain: Domain.hosts, place: this.place, product: image);
+  //   Product _product = await Products()
+  //       .save(domain: Domain.hosts, place: this.place, product: image);
 
-    Place result = Place.fromMap(this.place.toMap());
+  //   Place result = Place.fromMap(this.place.toMap());
 
-    int _index = result.products.indexWhere((element) => element == _product);
+  //   int _index = result.products.indexWhere((element) => element == _product);
 
-    if (_index == -1) {
-      result.products.add(_product);
-    } else {
-      result.products[_index] = _product;
-    }
+  //   if (_index == -1) {
+  //     result.products.add(_product);
+  //   } else {
+  //     result.products[_index] = _product;
+  //   }
 
-    await CommonDatabase.update<Place>(table: hostPlacesTable, data: result);
-  }
+  //   await CommonDatabase.update<Place>(table: hostPlacesTable, data: result);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +47,23 @@ class Options extends StatelessWidget {
       MainOptions(titleText: "Details"),
       BoxOptions(
           titleText: 'Photos',
-          coverImagePath: this.product.coverImagePath,
+          subTitleText: 'Add and edit photos',
+          // coverImagePath: this.product.coverImagePath,
+          // onTap: () {
+          //   UploadPictureWidget(
+          //           removeOptions: true,
+          //           afterSaved: (String publicId) {
+          //             _fetchImage(publicId);
+          //           },
+          //           context: context)
+          //       .openDialog();
+          // },
           onTap: () {
-            UploadPictureWidget(
-                    removeOptions: true,
-                    afterSaved: (String publicId) {
-                      _fetchImage(publicId);
-                    },
-                    context: context)
-                .openDialog();
+            showCupertinoModalPopup(
+                context: context,
+                builder: (BuildContext context) {
+                  return PhotoForm(place: place, product: product);
+                });
           }),
       BoxOptions(
           titleText: 'Main info',
