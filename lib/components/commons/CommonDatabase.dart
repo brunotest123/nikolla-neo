@@ -11,6 +11,7 @@ import 'package:nikolla_neo/models/User.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Product.dart';
 import 'package:nikolla_neo/models/Shift.dart';
+import 'package:nikolla_neo/models/ProductPhoto.dart';
 
 class CommonDatabase {
   static Future begin() async {
@@ -28,6 +29,7 @@ class CommonDatabase {
     Hive.registerAdapter(ShiftStatusAdapter());
     Hive.registerAdapter(GuestProfileAdapter());
     Hive.registerAdapter(HostProfileAdapter());
+    Hive.registerAdapter(ProductPhotoAdapter());
 
     await Hive.openBox<Session>(sessionsTable);
   }
