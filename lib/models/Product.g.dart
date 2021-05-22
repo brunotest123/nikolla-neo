@@ -66,7 +66,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       description: fields[7] as String,
       status: fields[8] as ProductStatus,
       exclusiveWeekDays: (fields[9] as List)?.cast<String>(),
-      coverImagePath: fields[10] as String,
+      productPhotos: (fields[10] as List)?.cast<ProductPhoto>(),
     );
   }
 
@@ -95,7 +95,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(9)
       ..write(obj.exclusiveWeekDays)
       ..writeByte(10)
-      ..write(obj.coverImagePath);
+      ..write(obj.productPhotos);
   }
 
   @override

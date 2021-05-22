@@ -31,23 +31,26 @@ class ProductTile extends StatelessWidget {
       ]);
 
   Widget _avatar() {
-    if (product.coverImagePath == null || product.coverImagePath == "") {
+    if (product.productPhotos.length == 0){
       return CircleAvatar(
           child: Icon(Icons.camera_alt_outlined, color: lightGrey),
           backgroundColor: darkGreyFive);
+    } else {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20.0),
+      child: Container(
+          height: 40.0,
+          width: 40.0,
+          child: CachedNetworkImage(
+              imageUrl: CloudinaryShared.imageThumbAvatar(
+                  publicId: product.productPhotos.firstWhere((photo) => photo.ordering == 1).pathImage),
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()))),
+    );
+
     }
 
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
-        child: Container(
-            height: 40.0,
-            width: 40.0,
-            child: CachedNetworkImage(
-                imageUrl: CloudinaryShared.imageThumbAvatar(
-                    publicId: product.coverImagePath),
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.high,
-                placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()))));
   }
 }
