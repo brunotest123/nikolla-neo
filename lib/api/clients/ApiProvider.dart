@@ -32,6 +32,12 @@ class ApiProvider {
     return _responseData(await instance.get(path, queryParameters: params));
   }
 
+  static Future<Response<Map>> delete(
+      {String path, Map<String, dynamic> params}) async {
+    Dio instance = await _getInstance();
+    return _responseData(await instance.delete(path, data: params));
+  }
+
   static Response<Map> _responseData(Response<Map> response) {
     developer.log('Response BODY:');
     String res2Json = json.encode(response.data);

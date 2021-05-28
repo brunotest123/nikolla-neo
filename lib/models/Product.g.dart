@@ -66,14 +66,15 @@ class ProductAdapter extends TypeAdapter<Product> {
       description: fields[7] as String,
       status: fields[8] as ProductStatus,
       exclusiveWeekDays: (fields[9] as List)?.cast<String>(),
-      productPhotos: (fields[10] as List)?.cast<ProductPhoto>(),
+      coverImagePath: fields[10] as String,
+      productPhotos: (fields[11] as List)?.cast<ProductPhoto>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -95,6 +96,8 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(9)
       ..write(obj.exclusiveWeekDays)
       ..writeByte(10)
+      ..write(obj.coverImagePath)
+      ..writeByte(11)
       ..write(obj.productPhotos);
   }
 

@@ -34,7 +34,7 @@ class ProductPhoto extends Equatable {
     Map<String, dynamic> map = Map<String, dynamic>();
 
     if (this.id != null && ignoreId != true) map['id'] = this.id;
-    if (this.pathImage != null) map['name'] = this.pathImage;
+    if (this.pathImage != null) map['path_image'] = this.pathImage;
     if (this.ordering != null) map['ordering'] = this.ordering;
     if (this.cover != null) map['cover'] = this.cover;
     if (this.createdAt != null) map['created_at'] = this.createdAt.toString();
@@ -44,6 +44,7 @@ class ProductPhoto extends Equatable {
   }
 
   factory ProductPhoto.fromMap(Map<String, dynamic> map) {
+    
     return ProductPhoto(
         id: map['id'],
         pathImage: map['path_image'],

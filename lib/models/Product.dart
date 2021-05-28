@@ -11,6 +11,9 @@ import 'ProductPhoto.dart';
 
 part 'Product.g.dart';
 
+const String hostProductsTable = "host_products";
+const String guestProductsTable = "guest_products";
+
 @HiveType(typeId: 7)
 enum ProductStatus {
   @HiveField(0)
@@ -47,7 +50,8 @@ class Product extends Equatable {
   @HiveField(9)
   final List<String> exclusiveWeekDays;
   @HiveField(10)
-  // final String coverImagePath;
+  final String coverImagePath;
+  @HiveField(11)
   final List<ProductPhoto> productPhotos;
 
   Product(
@@ -61,6 +65,7 @@ class Product extends Equatable {
       this.description,
       this.status,
       this.exclusiveWeekDays,
+      this.coverImagePath,
       this.productPhotos});
 
   String weekDaysAvailable(BuildContext context) =>
@@ -82,13 +87,13 @@ class Product extends Equatable {
     if (this.createdAt != null) map['created_at'] = this.createdAt.toString();
     if (this.updatedAt != null) map['updated_at'] = this.updatedAt.toString();
     if (this.status != null) map['status'] = productStatusString[this.status];
-    // if (this.coverImagePath != null)
-    //   map['cover_image_path'] =
-    //       (this.coverImagePath == '' ? null : this.coverImagePath);
+    if (this.coverImagePath != null)
+      map['cover_image_path'] =
+          (this.coverImagePath == '' ? null : this.coverImagePath);
     if (this.exclusiveWeekDays != null)
       map['exclusive_week_days'] = this.exclusiveWeekDays.toList();
     if (this.productPhotos != null) 
-      map['product_photos'] = this.productPhotos.toList();
+      map['product_photos'] = this.productPhotos.map((p) => p.toMap()).toList();
 
     return map;
   }
@@ -105,8 +110,8 @@ class Product extends Equatable {
         description: map['description'],
         ordering: map['ordering'],
         status: EnumToString.fromString(ProductStatus.values, map['status']),
-        // coverImagePath:
-        //     (map['cover_image_path'] == '' ? null : map['cover_image_path']),
+        coverImagePath:
+            (map['cover_image_path'] == '' ? null : map['cover_image_path']),
         exclusiveWeekDays:
             exclusiveWeekDaysParsed.map((i) => i.toString()).toList(),
         createdAt: (map['created_at'] == null
@@ -116,7 +121,7 @@ class Product extends Equatable {
             ? null
             : DateTime.parse(map['updated_at'])),
         sale: Money.fromJson(map['sale']),
-        productPhotos: map['product_photos']);
+        productPhotos: ProductPhotoSerializable().fromJsonArray(map['product_photos']));
   }
 
   String toJson() => json.encode(toMap());
