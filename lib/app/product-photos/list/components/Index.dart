@@ -23,42 +23,51 @@ class Index extends StatelessWidget {
     FetchProductPhotosController(place: place, product: product).call();
   }
 
-  _fetchImage(String publicId) async {
-    Map<String, dynamic> map = Map<String, dynamic>();
-
-    map['path_image'] = publicId;
-    map['ordering'] = 0;
-    map['cover'] = false;
-
-    ProductPhoto _productPhoto = ProductPhotos().save(
-        domain: Domain.hosts,
-        place: place,
-        product: product,
-        productPhoto: ProductPhoto.fromMap(map));
+  _updateImage({String publicId, ProductPhoto photoDeleted}) async {
 
     Place placeResult = Place.fromMap(place.toMap());
 
     Product productResult =
         placeResult.products.firstWhere((element) => element == product);
+        
+    int _indexProduct = 0;
 
-    int _index = productResult.productPhotos
-        .indexWhere((element) => element == _productPhoto);
+    if (photoDeleted != null) {
 
-    if (_index == -1) {
-      productResult.productPhotos.add(_productPhoto);
+      await ProductPhotos().delete(domain: Domain.hosts, place: place, product: product, productPhoto: photoDeleted);
+      productResult.productPhotos.remove(photoDeleted);
+
     } else {
-      productResult.productPhotos[_index] = _productPhoto;
+
+      Map<String, dynamic> map = Map<String, dynamic>();
+
+      map['path_image'] = publicId;
+      map['ordering'] = 0;
+      map['cover'] = false;
+
+      ProductPhoto _productPhoto = ProductPhotos().save(
+          domain: Domain.hosts,
+          place: place,
+          product: product,
+          productPhoto: ProductPhoto.fromMap(map));
+
+      int _index = productResult.productPhotos
+          .indexWhere((element) => element == _productPhoto);
+
+      if (_index == -1) {
+        productResult.productPhotos.add(_productPhoto);
+      } else {
+        productResult.productPhotos[_index] = _productPhoto;
+      }
+
     }
-    
-    int _indexProduct = placeResult.products.indexWhere((element) => element == product);
-    placeResult.products[_indexProduct] = productResult;
 
-    await CommonDatabase.update<Place>(table: hostPlacesTable, data: placeResult);
+      _indexProduct =
+          placeResult.products.indexWhere((element) => element == product);
+      placeResult.products[_indexProduct] = productResult;
 
-  }
-
-  _deleteProductPhoto(ProductPhoto photo){
-    ProductPhotos().delete(domain: Domain.hosts, place: place, product: product, productPhoto: photo);
+    await CommonDatabase.update<Place>(
+        table: hostPlacesTable, data: placeResult);
   }
 
   Widget _addPhoto(BuildContext context) {
@@ -69,7 +78,7 @@ class Index extends StatelessWidget {
         UploadPictureWidget(
             context: context,
             afterSaved: (String publicId) {
-              _fetchImage(publicId);
+              _updateImage(publicId: publicId);
             }).openDialog();
       },
     );
@@ -122,11 +131,10 @@ class Index extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 itemCount: response.productPhotos.length,
                 itemBuilder: (context, i) => ProductPhotoItem(
-                  productPhoto: response.productPhotos[i],
-                  deletePhoto: (){
-                    _deleteProductPhoto(response.productPhotos[i]);
-                  } 
-                ),
+                    productPhoto: response.productPhotos[i],
+                    deletePhoto: () {
+                      _updateImage(photoDeleted: response.productPhotos[i]);
+                    }),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 2,

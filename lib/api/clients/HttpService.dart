@@ -66,11 +66,10 @@ class HttpService<T, S extends Serializable<T>> {
     }
   }
 
-  Future<bool> delete({Domain domain, @required String path}) async {
+  delete({Domain domain, @required String path}) async {
     try{
-      await ApiProvider.delete(
-        path: _buildPath(domain: domain, path: path));
-        return true;
+      await ApiProvider.delete(path: _buildPath(domain: domain, path: path));
+      return true;
     } on DioError catch (e, stackTrace) {
       throw new HttpServiceException(
           cause: e.response.data.toString(),

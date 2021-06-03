@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:nikolla_neo/api/clients/CloudinaryShared.dart';
 import 'package:nikolla_neo/models/ProductPhoto.dart';
 
 class ProductPhotoItem extends StatelessWidget {
@@ -11,9 +13,11 @@ class ProductPhotoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridTile(
-      child: Image.network(
-        productPhoto.pathImage,
+      child: CachedNetworkImage(
+        imageUrl:
+            CloudinaryShared.imageThumbAvatar(publicId: productPhoto.pathImage),
         fit: BoxFit.cover,
+        filterQuality: FilterQuality.high,
       ),
       footer: GridTileBar(
         backgroundColor: Colors.black54,
