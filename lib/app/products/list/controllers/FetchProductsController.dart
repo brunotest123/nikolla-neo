@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nikolla_neo/api/Domain.dart';
+import 'package:nikolla_neo/api/ProductPhotos.dart';
 import 'package:nikolla_neo/api/Products.dart';
 import 'package:nikolla_neo/app/BaseController.dart';
 import 'package:nikolla_neo/components/commons/CommonDatabase.dart';
 import 'package:nikolla_neo/models/Place.dart';
 import 'package:nikolla_neo/models/Product.dart';
+import 'package:nikolla_neo/models/ProductPhoto.dart';
 
 class FetchProductsController extends BaseController {
   final Place place;

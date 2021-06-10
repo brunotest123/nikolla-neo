@@ -43,9 +43,7 @@ class ProductTile extends StatelessWidget {
             width: 40.0,
             child: CachedNetworkImage(
                 imageUrl: CloudinaryShared.imageThumbAvatar(
-                    publicId: product.productPhotos
-                        .firstWhere((photo) => photo.ordering == 1)
-                        .pathImage),
+                    publicId: product.productPhotos.length > 0 ? product.productPhotos[0].pathImage : ''),
                 fit: BoxFit.cover,
                 filterQuality: FilterQuality.high,
                 placeholder: (context, url) =>
